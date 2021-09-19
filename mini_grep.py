@@ -23,7 +23,7 @@ import argparse
 import re
 
 
-def lookup_for_pattern(args):
+def mini_grep(args):
     for file in args.File:
         line_no = 1
         try:
@@ -44,7 +44,7 @@ def lookup_for_pattern(args):
     return 0
 
 
-def main():
+if __name__ == '__main__':
     # Define arguments
     parser = argparse.ArgumentParser(description="mini-grep")
     parser.add_argument('-e', metavar='PATTERN', type=str,
@@ -55,8 +55,4 @@ def main():
                         help='can be zero or more arguments. '
                              'If zero args are given')
     args = parser.parse_args()
-    lookup_for_pattern(args)
-
-
-if __name__ == '__main__':
-    main()
+    mini_grep(args)

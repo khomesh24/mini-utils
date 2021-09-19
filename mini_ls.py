@@ -21,15 +21,15 @@ import argparse
 import os
 import pwd
 import stat
-import sys
 import time
 
 
-def list_files(path, recursive):
+def mini_ls(path, recursive):
     try:
         info = os.stat(path)
     except FileNotFoundError:
-        sys.exit(path + ': File not found')
+        print(path + ': File not found')
+        return 2
     print("{:4s} {:8s} {:8s} {:6s}".format(str(oct(info.st_mode))[-3:],
                                            pwd.getpwuid(info.st_uid).pw_name,
                                            time.ctime(info.st_mtime),
@@ -42,10 +42,10 @@ def list_files(path, recursive):
                                                    pwd.getpwuid(info.st_uid).pw_name,  # E501
                                                    time.ctime(info.st_mtime),
                                                    path + '/' + file))
-    exit(0)
+    return 0
 
 
-def main():
+if __name__ == '__main__':
     # Define arguments
     parser = argparse.ArgumentParser(description="mini-grep")
     parser.add_argument('-r', action='store_true',
@@ -57,8 +57,4 @@ def main():
                              'the current directory.')
     args = parser.parse_args()
     for i in args.File:
-        list_files(i, args.r)
-
-
-if __name__ == '__main__':
-    main()
+        mini_ls(i, args.r)

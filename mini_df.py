@@ -22,7 +22,7 @@ import os.path
 import shutil
 
 
-def main(args):
+def mini_df(args):
     #print("{:<20s} {:<20s} {:<20s}\t{:<s}".format('Total', 'Used', 'Free', 'Path'))
     for path in args.Path:
         try:
@@ -40,14 +40,14 @@ def main(args):
                 usage['free'] = usage.get('free') / 1024
                 key += 1
 
-        print("{:<.1f} {:s} {:<.1f} {:s} {:<.1f} {:s}\t{:s}".format(usage.get('total'),
+        print("{:<.1f}{:s} {:<.1f}{:s} {:<.1f}{:s}\t{:s}".format(usage.get('total'),
                                                                     unit.get(key),
                                                                     usage.get('used'),
                                                                     unit.get(key),
                                                                     usage.get('free'),
                                                                     unit.get(key),
                                                                     path))
-    exit(0)
+    return 0
 
 
 if __name__ == '__main__':
@@ -60,4 +60,4 @@ if __name__ == '__main__':
                              ' If zero args are given it will list the disk'
                              'space usage of the current directory')
     args = parser.parse_args()
-    main(args)
+    mini_df(args)
