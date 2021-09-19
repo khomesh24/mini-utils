@@ -26,8 +26,12 @@ import re
 def lookup_for_pattern(args):
     for file in args.File:
         line_no = 1
-        with open(file, 'r') as fobj:
-            data = fobj.read()
+        try:
+            with open(file, 'r') as fobj:
+                data = fobj.read()
+        except FileNotFoundError as e:
+            print(e)
+            continue
         for line in data.splitlines():
             if args.q:
                 if not re.search(args.e, line):

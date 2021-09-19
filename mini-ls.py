@@ -1,3 +1,5 @@
+#!/usr/bin/python3 -s
+
 """
 mini-ls
 -------
@@ -19,14 +21,19 @@ import argparse
 import os
 import pwd
 import stat
+import sys
 import time
 
 
 def list_files(path, recursive):
-    info = os.stat(path)
-    print("{:20s} {:6s} {:6s} {:6s}".format(path, str(oct(info.st_mode))[-3:],
-                                            pwd.getpwuid(info.st_uid).pw_name,
-                                            time.ctime(info.st_mtime)))
+    try:
+        info = os.stat(path)
+    except FileNotFoundError:
+        sys.exit(path + ': File not found')
+    print("{:4s} {:8s} {:8s} {:6s}".format(str(oct(info.st_mode))[-3:],
+                                           pwd.getpwuid(info.st_uid).pw_name,
+                                           time.ctime(info.st_mtime),
+                                           path))
     stat.S_ISDIR(info.st_mode)
     if recursive and stat.S_ISDIR(info.st_mode):
         for file in os.listdir(path):
@@ -35,7 +42,7 @@ def list_files(path, recursive):
                                                    pwd.getpwuid(info.st_uid).pw_name,  # E501
                                                    time.ctime(info.st_mtime),
                                                    path + '/' + file))
-    return 0
+    exit(0)
 
 
 def main():
@@ -44,7 +51,7 @@ def main():
     parser.add_argument('-r', action='store_true',
                         help='run recursively on any directory '
                              'it comes across')
-    parser.add_argument('File', nargs='*', default='./', type=str,
+    parser.add_argument('File', nargs='*', default=[os.path.abspath(os.curdir)], type=str,
                         help='can be zero or more arguments. If zero args '
                              'are given, it will list information about '
                              'the current directory.')

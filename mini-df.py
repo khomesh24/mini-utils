@@ -1,3 +1,5 @@
+#!/usr/bin/python3 -s
+
 """
 mini-df
 -------
@@ -21,7 +23,7 @@ import shutil
 
 
 def main(args):
-    print("{:15s} {:15s} {:15s}\t{:s}".format('Total', 'Used', 'Free', 'Path'))
+    #print("{:<20s} {:<20s} {:<20s}\t{:<s}".format('Total', 'Used', 'Free', 'Path'))
     for path in args.Path:
         try:
             df = shutil.disk_usage(path)
@@ -29,22 +31,22 @@ def main(args):
             print(e)
             continue
         key = 0
+        unit = {0: 'B ', 1: 'KB', 2: 'MB', 3: 'GB', 4: 'TB'}
+        usage = {'total': df.total, 'used': df.used, 'free': df.free}
         if args.H:
-            unit = {0: 'Bytes', 1: 'KB', 2: 'MB', 3: 'GB', 4: 'TB'}
-            usage = {'total': df.total, 'used': df.used, 'free': df.free}
             while usage.get('total') > 1024 and key <= 4:
                 usage['total'] = usage.get('total') / 1024
                 usage['used'] = usage.get('used') / 1024
                 usage['free'] = usage.get('free') / 1024
                 key += 1
 
-        print("{:.1f}{:s} {:12.1f}{:s} {:12.1f}{:s}\t{:s}".format(usage.get('total'),
-                                                                  unit.get(key),
-                                                                  usage.get('used'),
-                                                                  unit.get(key),
-                                                                  usage.get('free'),
-                                                                  unit.get(key),
-                                                                  path))
+        print("{:<.1f} {:s} {:<.1f} {:s} {:<.1f} {:s}\t{:s}".format(usage.get('total'),
+                                                                    unit.get(key),
+                                                                    usage.get('used'),
+                                                                    unit.get(key),
+                                                                    usage.get('free'),
+                                                                    unit.get(key),
+                                                                    path))
     exit(0)
 
 
