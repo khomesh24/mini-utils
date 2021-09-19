@@ -1,0 +1,6 @@
+[flake8]
+ignore = D203
+exclude = .git
+max-complexity = 10
+filename = *.py
+max-line-length = 100
